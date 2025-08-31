@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "imagegen-mcp": {
+      "command": "./bin/mcp-imagegen.sh",
+      "args": [
+        "--models",
+        "dall-e-3",
+        "gpt-image-1"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here"
+      },
+      "cwd": "/path/to/imagegen-mcp"
+    }
+  }
+}

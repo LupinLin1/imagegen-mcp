@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "imagegen-dalle3": {
+      "command": "npx",
+      "args": [
+        "@lupinlin1/imagegen-mcp",
+        "--models",
+        "dall-e-3"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here"
+      }
+    },
+    "imagegen-gpt": {
+      "command": "npx",
+      "args": [
+        "@lupinlin1/imagegen-mcp",
+        "--models",
+        "gpt-image-1"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here"
+      }
+    }
+  }
+}

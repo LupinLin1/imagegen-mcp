@@ -40,7 +40,10 @@
     "dev": "tsx src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepack": "npm run build",
-    "postinstall": "echo \"✅ imagegen-mcp installed successfully! Run 'imagegen-mcp --help' to get started.\""
+    "postinstall": "echo \"✅ imagegen-mcp installed successfully! Run 'imagegen-mcp --help' to get started.\"",
+    "config:generate": "node scripts/generate-configs.js",
+    "config:quick": "node scripts/quick-config.js",
+    "publish:all": "./scripts/publish.sh"
   },
   "files": [
     "dist/**/*",

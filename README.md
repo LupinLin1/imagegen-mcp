@@ -1,6 +1,20 @@
 # MCP OpenAI Image Generation Server
 
-[![npm version](https://img.shields.io/npm/v/imagegen-mcp)](https://www.npmjs.com/package/imagegen-mcp)
+[![npm version](https://img.shields.io/npm/v/@lupinlin1/imagegen-mcp)](https://www.npmjs.com/package/@lupinlin1/imagegen-mcp)
+
+> 🚀 **零安装配置！** 直接在MCP客户端中使用，无需任何预安装步骤
+>
+> ```json
+> {
+>   "mcpServers": {
+>     "imagegen-mcp": {
+>       "command": "npx",
+>       "args": ["@lupinlin1/imagegen-mcp", "--models", "dall-e-3"],
+>       "env": { "OPENAI_API_KEY": "your_api_key" }
+>     }
+>   }
+> }
+> ```
 
 This project provides a server implementation based on the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/introduction) that acts as a wrapper around OpenAI's Image Generation and Editing APIs (see [OpenAI documentation](https://platform.openai.com/docs/api-reference/images)).
 
@@ -48,37 +62,47 @@ npx @lupinlin1/imagegen-mcp [options]
 *   npm or yarn
 *   An OpenAI API key
 
-## Integration with Cursor
+## 🎯 零安装配置 (推荐)
 
-You can easily integrate this server with Cursor to use its image generation capabilities directly within the editor:
+**无需任何预安装步骤！**直接配置即可使用：
 
-1.  **Open Cursor Settings:**
-    *   Go to `File > Preferences > Cursor Settings` (or use the shortcut `Ctrl+,` / `Cmd+,`).
-2.  **Navigate to MCP Settings:**
-    *   Search for "MCP" in the settings search bar.
-    *   Find the "Model Context Protocol: Custom Servers" setting.
-3.  **Add Custom Server:**
-    *   Click on "Edit in settings.json".
-    *   Add a new entry to the `mcpServers` array. It should look something like this:
-
-    ```json
-    "mcpServers": {
-        "imagegen-mcp": {
-            "command": "@lupinlin1/imagegen-mcp",
-            "args": ["--models", "gpt-image-1"],
-            "env": {
-                "OPENAI_API_KEY": "your_api_key_here"
-            }
-        }
+### Cursor 编辑器
+```json
+{
+  "mcpServers": {
+    "imagegen-mcp": {
+      "command": "npx",
+      "args": ["@lupinlin1/imagegen-mcp", "--models", "dall-e-3"],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here"
+      }
     }
-    ```
+  }
+}
+```
 
-    *   **Customize the command:**
-        *   You can change the `--models` argument in the `command` field to specify which models you want Cursor to have access to (e.g., `--models dall-e-3` or `--models gpt-image-1`). Make sure your OpenAI API key has access to the selected models.
-4.  **Save Settings:**
-    *   Save the `settings.json` file.
+### Claude Desktop
+```json
+{
+  "mcpServers": {
+    "imagegen-mcp": {
+      "command": "npx",
+      "args": ["@lupinlin1/imagegen-mcp"],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here"
+      }
+    }
+  }
+}
+```
 
-Cursor should now recognize the "OpenAI Image Gen" server, and its tools (`text-to-image`, `image-to-image`) will be available in the MCP tool selection list (e.g., when using `@` mention in chat or code actions).
+### 💡 零安装原理
+- ✅ **首次运行**: `npx` 自动下载并缓存包
+- ✅ **后续启动**: 使用缓存，启动快速
+- ✅ **自动更新**: 始终使用最新版本
+- ✅ **无污染**: 不会全局安装任何包
+
+📁 **更多配置示例**: 查看 [`examples/mcp-configs/`](./examples/mcp-configs/) 目录
 
 ## Setup
 
