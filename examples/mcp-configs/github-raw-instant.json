@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "imagegen-mcp-remote": {
+      "command": "bash",
+      "args": [
+        "-c",
+        "curl -fsSL https://raw.githubusercontent.com/LupinLin1/imagegen-mcp/main/scripts/run-remote.sh | bash -s -- --models dall-e-3"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "your_openai_api_key_here",
+        "GITHUB_BRANCH": "main"
+      }
+    }
+  }
+}

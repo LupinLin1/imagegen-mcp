@@ -33,28 +33,37 @@ Here's an example of generating an image directly in Cursor using the `text-to-i
   <img src="https://raw.githubusercontent.com/spartanz51/imagegen-mcp/refs/heads/main/cursor.gif" alt="Example usage in Cursor" width="600"/>
 </div>
 
-## 🚀 快速安装
+## 🚀 安装方式
 
-### 方法1: 全局安装 (推荐)
+### 🎯 零安装配置 (推荐)
+
+**方式1: NPX自动下载** (需要NPM发布)
 ```bash
 npm install -g @lupinlin1/imagegen-mcp
 ```
 
-### 方法2: 一键安装脚本
+**方式2: GitHub远程执行** (立即可用)
 ```bash
-# macOS/Linux
+# 一行命令安装脚本
 curl -fsSL https://raw.githubusercontent.com/LupinLin1/imagegen-mcp/main/scripts/install.sh | bash
-
-# Windows PowerShell
-iwr https://raw.githubusercontent.com/LupinLin1/imagegen-mcp/main/scripts/install.ps1 | iex
 ```
 
-### 方法3: 使用 npx (无需安装)
+**方式3: 本地脚本** (开发者友好)
 ```bash
-npx @lupinlin1/imagegen-mcp [options]
+git clone https://github.com/LupinLin1/imagegen-mcp.git
+cd imagegen-mcp
+npm install && npm run build
 ```
 
-📖 **完整安装指南**: 查看 [INSTALL.md](./INSTALL.md) 获取详细说明
+### 📊 方案对比
+
+| 方式 | 安装步骤 | 网络依赖 | 启动速度 | 适用场景 |
+|------|----------|----------|----------|----------|
+| NPX自动下载 | 0步 | 首次需要 | 快 | 生产环境 |
+| GitHub远程 | 0步 | 每次需要 | 中等 | 快速试用 |
+| 本地脚本 | 1步克隆 | 无 | 最快 | 开发测试 |
+
+📁 **更多配置**: 查看 [`examples/mcp-configs/`](./examples/mcp-configs/) 获取所有配置示例
 
 ## Prerequisites
 

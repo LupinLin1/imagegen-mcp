@@ -43,6 +43,7 @@
     "postinstall": "echo \"✅ imagegen-mcp installed successfully! Run 'imagegen-mcp --help' to get started.\"",
     "config:generate": "node scripts/generate-configs.js",
     "config:quick": "node scripts/quick-config.js",
+    "publish:check": "node scripts/pre-publish-check.js",
     "publish:all": "./scripts/publish.sh"
   },
   "files": [
