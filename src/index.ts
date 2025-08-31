@@ -13,6 +13,12 @@ if (!OPENAI_API_KEY) {
   process.exit(1);
 }
 
+// Support for custom OpenAI base URL
+const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL;
+if (OPENAI_BASE_URL) {
+  console.log(`Using custom OpenAI base URL: ${OPENAI_BASE_URL}`);
+}
+
 // Parse command line arguments for models
 const args = process.argv.slice(2);
 let allowedModels: string[] = [];
@@ -29,8 +35,11 @@ if (modelsIndex !== -1) {
 }
 
 
-const imageClient = new OpenAIImageClient(OPENAI_API_KEY, allowedModels);
+const imageClient = new OpenAIImageClient(OPENAI_API_KEY, allowedModels, OPENAI_BASE_URL);
 
+// Get the allowed models for Zod schema
+const allowedModelValues = Object.values(imageClient.getAllowedModels());
+console.log("Allowed models for Zod schema:", allowedModelValues);
 
 function objectValuesToZodEnum<T extends string>(obj: Record<string, T>) {
   return Object.values(obj) as [T, ...T[]];
@@ -45,7 +54,7 @@ server.tool("text-to-image",
   { 
     text: z.string().describe("The prompt to generate an image from"),
     outputPath: z.string().describe("Absolute path where the output file should be saved."),
-    model: z.enum(objectValuesToZodEnum(imageClient.getAllowedModels())).optional().describe("The model to use").default(imageClient.getDefaultModel()),
+    model: z.enum(allowedModelValues as [string, ...string[]]).optional().describe("The model to use").default(imageClient.getDefaultModel()),
     size: z.enum(objectValuesToZodEnum(SIZES)).optional().describe("Size of the generated image").default(SIZES.S1024),
     style: z.enum(objectValuesToZodEnum(STYLES)).optional().describe("Style of the image (for dall-e-3)").default(STYLES.VIVID),
     output_format: z.enum(objectValuesToZodEnum(OUTPUT_FORMATS)).optional().describe("The format of the generated image").default(OUTPUT_FORMATS.PNG),
@@ -62,7 +71,7 @@ server.tool("text-to-image",
         model: model as any,
         size: size as any,
         style: style as any,
-        response_format: RESPONSE_FORMATS.B64_JSON,
+        response_format: RESPONSE_FORMATS.URL,
         output_format: output_format as any,
         output_compression: output_compression as any,
         moderation: moderation as any,
@@ -75,13 +84,25 @@ server.tool("text-to-image",
         throw new Error("No images were generated");
       }
 
-      const imageData = result.data[0].b64_json;
-      if (!imageData) {
-        throw new Error("Image data not found in response");
+      let filePath: string;
+      
+      if (result.data[0].b64_json) {
+        // Handle base64 format
+        filePath = imageClient.saveImageToTempFile(result.data[0].b64_json, output_format, outputPath);
+      } else if (result.data[0].url) {
+        // Handle URL format - download and save
+        const fetch = (await import('node-fetch')).default;
+        const response = await fetch(result.data[0].url);
+        if (!response.ok) {
+          throw new Error(`Failed to download image: ${response.statusText}`);
+        }
+        
+        const buffer = await response.buffer();
+        const base64Data = buffer.toString('base64');
+        filePath = imageClient.saveImageToTempFile(base64Data, output_format, outputPath);
+      } else {
+        throw new Error("No image data found in response (neither b64_json nor url)");
       }
-
-      // Save the image to the specified file path or a temporary file
-      const filePath = imageClient.saveImageToTempFile(imageData, output_format, outputPath);
 
       return {
         content: [
@@ -111,7 +132,7 @@ server.tool("image-to-image",
     prompt: z.string().describe("A text description of the desired image(s)"),
     outputPath: z.string().describe("Absolute path where the output file should be saved."),
     mask: z.string().optional().describe("Optional mask image whose transparent areas indicate where image should be edited. Must be a file path."),
-    model: z.enum(objectValuesToZodEnum(imageClient.getAllowedModels())).optional().describe("The model to use. Only gpt-image-1 and dall-e-2 are supported.").default(imageClient.getDefaultModel()),
+    model: z.enum(allowedModelValues as [string, ...string[]]).optional().describe("The model to use").default(imageClient.getDefaultModel()),
     size: z.enum(objectValuesToZodEnum(SIZES)).optional().describe("Size of the generated image").default(SIZES.S1024),
     output_format: z.enum(objectValuesToZodEnum(OUTPUT_FORMATS)).optional().describe("The format of the generated image").default(OUTPUT_FORMATS.PNG),
     output_compression: z.number().optional().describe("The compression of the generated image").default(100),
@@ -126,7 +147,7 @@ server.tool("image-to-image",
         mask,
         model: model as any,
         size: size as any,
-        response_format: RESPONSE_FORMATS.B64_JSON,
+        response_format: RESPONSE_FORMATS.URL,
         output_format: output_format as any,
         output_compression: output_compression as any,
         quality: quality as any,
@@ -137,13 +158,25 @@ server.tool("image-to-image",
         throw new Error("No images were generated");
       }
 
-      const imageData = result.data[0].b64_json;
-      if (!imageData) {
-        throw new Error("Image data not found in response");
+      let filePath: string;
+      
+      if (result.data[0].b64_json) {
+        // Handle base64 format
+        filePath = imageClient.saveImageToTempFile(result.data[0].b64_json, output_format, outputPath);
+      } else if (result.data[0].url) {
+        // Handle URL format - download and save
+        const fetch = (await import('node-fetch')).default;
+        const response = await fetch(result.data[0].url);
+        if (!response.ok) {
+          throw new Error(`Failed to download image: ${response.statusText}`);
+        }
+        
+        const buffer = await response.buffer();
+        const base64Data = buffer.toString('base64');
+        filePath = imageClient.saveImageToTempFile(base64Data, output_format, outputPath);
+      } else {
+        throw new Error("No image data found in response (neither b64_json nor url)");
       }
-
-      // Save the image to the specified file path or a temporary file
-      const filePath = imageClient.saveImageToTempFile(imageData, output_format, outputPath);
 
       return {
         content: [
