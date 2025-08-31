@@ -19,15 +19,28 @@ Here's an example of generating an image directly in Cursor using the `text-to-i
   <img src="https://raw.githubusercontent.com/spartanz51/imagegen-mcp/refs/heads/main/cursor.gif" alt="Example usage in Cursor" width="600"/>
 </div>
 
-## Quick Run with npx
+## 🚀 快速安装
 
-You can run the server directly from npm using `npx` (requires Node.js and npm):
-
+### 方法1: 全局安装 (推荐)
 ```bash
-npx imagegen-mcp [options]
+npm install -g @lupinlin1/imagegen-mcp
 ```
 
-See the [Running the Server](#running-the-server) section for more details on options and running locally.
+### 方法2: 一键安装脚本
+```bash
+# macOS/Linux
+curl -fsSL https://raw.githubusercontent.com/LupinLin1/imagegen-mcp/main/scripts/install.sh | bash
+
+# Windows PowerShell
+iwr https://raw.githubusercontent.com/LupinLin1/imagegen-mcp/main/scripts/install.ps1 | iex
+```
+
+### 方法3: 使用 npx (无需安装)
+```bash
+npx @lupinlin1/imagegen-mcp [options]
+```
+
+📖 **完整安装指南**: 查看 [INSTALL.md](./INSTALL.md) 获取详细说明
 
 ## Prerequisites
 
@@ -49,15 +62,15 @@ You can easily integrate this server with Cursor to use its image generation cap
     *   Add a new entry to the `mcpServers` array. It should look something like this:
 
     ```json
-    "mcpServers": [
-        "image-generator-gpt-image": {
-            "command": "npx imagegen-mcp --models gpt-image-1",
+    "mcpServers": {
+        "imagegen-mcp": {
+            "command": "@lupinlin1/imagegen-mcp",
+            "args": ["--models", "gpt-image-1"],
             "env": {
-                "OPENAI_API_KEY": "xxx"
+                "OPENAI_API_KEY": "your_api_key_here"
             }
         }
-      // ... any other custom servers ...
-    ]
+    }
     ```
 
     *   **Customize the command:**

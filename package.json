@@ -1,23 +1,26 @@
 {
-  "name": "imagegen-mcp",
-  "version": "1.0.4",
-  "description": "MCP server to generate images from text using OpenAI's API",
+  "name": "@lupinlin1/imagegen-mcp",
+  "version": "1.0.5",
+  "description": "MCP server to generate images from text using OpenAI's API - Enhanced version with improved installation",
   "keywords": [
     "mcp",
     "openai",
     "image",
     "generation",
     "imagegen",
-    "mcp-server"
+    "mcp-server",
+    "claude",
+    "cursor",
+    "ai-tools"
   ],
-  "author": "Anthony Maurin",
-  "homepage": "https://github.com/spartanz51/imagegen-mcp#readme",
+  "author": "LupinLin1 (Enhanced from Anthony Maurin)",
+  "homepage": "https://github.com/LupinLin1/imagegen-mcp#readme",
   "bugs": {
-    "url": "https://github.com/spartanz51/imagegen-mcp/issues"
+    "url": "https://github.com/LupinLin1/imagegen-mcp/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/spartanz51/imagegen-mcp.git"
+    "url": "git+https://github.com/LupinLin1/imagegen-mcp.git"
   },
   "license": "ISC",
   "type": "module",
@@ -25,13 +28,27 @@
   "bin": {
     "imagegen-mcp": "./bin/imagegen-mcp.js"
   },
+  "preferGlobal": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": ["darwin", "linux", "win32"],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepack": "npm run build",
+    "postinstall": "echo \"✅ imagegen-mcp installed successfully! Run 'imagegen-mcp --help' to get started.\""
   },
+  "files": [
+    "dist/**/*",
+    "bin/**/*",
+    "README.md",
+    "LICENSE",
+    ".env.example"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.10.2",
     "@types/form-data": "^2.2.1",
